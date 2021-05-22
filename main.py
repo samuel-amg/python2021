@@ -12,11 +12,6 @@ def clear():
     else:
         _ = system('clear')
 
-
-print("""**************************
-*    SANDWICHES UCAB     *
-**************************\n""")
-
 # Definimos el diccionario de datos con los ingredientes
 ingredientes = {
 	'ja': { 'precio': 40, 'nombre': 'Jamón'},
@@ -36,6 +31,10 @@ cont = 0
 while True:
 
 	clear()
+
+	print("""**************************
+*    SANDWICHES UCAB     *
+**************************\n""")
 
 	precioActual = 0
 
@@ -99,8 +98,8 @@ while True:
 
 	# Imprimir orden
 	print(f'\nUsted seleccionó un { orden } \n')
-	print(f'Subtotal a pagar por un { orden }: { precioActual }\n')
-	print('*******************')
+	print(f'Subtotal a pagar por un sandwich { tam }: { precioActual }\n')
+	print('**************************')
 
 	# Se suma el precio del sandwich individual al total
 	precioTotal += precioActual
@@ -109,8 +108,8 @@ while True:
 
 	# Si se presiona 'n', se muestra el total y termina el programa
 	if continuar == 'n':
-		print('*******************')
-		print(f'EL pedido tiene un total de { cont + 1 } sandwich(es) por un monto de { precioTotal }\n')
+		print('**************************')
+		print(f'El pedido tiene un total de { cont + 1 } sandwich(es) por un monto de { precioTotal }\n')
 		print('Gracias por su compra, regrese pronto.')
 		break
 
