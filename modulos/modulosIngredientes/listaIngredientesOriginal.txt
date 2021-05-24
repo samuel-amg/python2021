@@ -1,0 +1,7 @@
+ja,40,Jamón
+ch,35,Champiñones
+pi,30,Pimentón
+dq,40,Doble Queso
+ac,57.5,Aceitunas
+pe,38.5,Pepperoni
+sa,62.5,Salchichón
