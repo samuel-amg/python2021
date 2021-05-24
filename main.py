@@ -1,27 +1,5 @@
-# Importación para saber en qué sistema operativo se está
-from os import system, name
-
-# Función para limpiar pantalla en consola
-def clear():
-  
-    # Limpiar consola para Windows
-    if name == 'nt':
-        _ = system('cls')
-  
-    # Limpiar consola para Linux y Mac
-    else:
-        _ = system('clear')
-
-# Definimos el diccionario de datos con los ingredientes
-ingredientes = {
-	'ja': { 'precio': 40, 'nombre': 'Jamón'},
-	'ch': { 'precio': 35, 'nombre': 'Champiñones'},
-	'pi': { 'precio': 30, 'nombre': 'Pimentón'},
-	'dq': { 'precio': 40, 'nombre': 'Doble Queso'},
-	'ac': { 'precio': 57.5, 'nombre': 'Aceitunas'},
-	'pp': { 'precio': 38.5, 'nombre': 'Pepperoni'},
-	'sa': { 'precio': 62.5, 'nombre': 'Salchichon'},
-}
+from modulos.clear import clear
+from modulos.modulosIngredientes.diccionarioIngredientes import ingredientes
 
 # Inicializamos variables
 precioTotal = 0
@@ -32,9 +10,9 @@ while True:
 
 	clear()
 
-	print("""**************************
-*    SANDWICHES UCAB     *
-**************************\n""")
+	print("**************************\n"\
+		  "*    SANDWICHES UCAB     *\n"\
+		  "**************************\n")
 
 	precioActual = 0
 
@@ -63,14 +41,17 @@ while True:
 
 
 	# Imprimir ingredientes
-	print("\nIngredientes:")
+	def imprimirIngredientes():
+		print("\nIngredientes:")
 
-	for ingrediente in ingredientes:
-		print(f'{ ingredientes[ingrediente]["nombre"] }\t({ ingrediente })')
-	
-	print()
+		for i in ingredientes:
+			print(f'{ ingredientes[i]["nombre"] }\t({ i })')
+		
+		print()
 
-	# Aca se alamcenará el ingrediente seleccionado
+	imprimirIngredientes()
+
+	# Aca se almacenará el ingrediente seleccionado
 	ing = 'ingredientes'
 
 	# Acá armamos el string de la orden
@@ -79,15 +60,22 @@ while True:
 	# Bandera para saber si se escoge algún ingrediente
 	banIng = False
 
-	# Ciclo que se encarga de pedir ingredientes hasta precionar enter
-	# SE NECESITA VALIDAR QUE SE INTRODUZCAN INGREDIENTES VÁLIDOS
+	# Ciclo que se encarga de pedir ingredientes hasta presionar enter
 	while ing != '':
 		ing = input("Indique ingrediente (enter para terminar): ")
 
-		if ing:
+		if ing in ingredientes:
 			precioActual += ingredientes[ing]["precio"]
 			orden += ingredientes[ing]["nombre"] + ", "
 			banIng = True
+		# Validación de ingrediente ingresado
+		else:
+			clear()
+			print("Por favor ingrese un ingrediente válido, asegurese de ingresar la etiqueta de \n"\
+				"dos letra provista dentro del parentesis en la lista.")
+			imprimirIngredientes()
+		
+		
 
 	# Acá se quita la coma del string si se seleccionarion ingredientes
 	# Si no, se añade que solo es de Queso
