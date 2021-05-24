@@ -1,9 +1,10 @@
 from modulos.clear import clear
-from modulos.modulosIngredientes.diccionarioIngredientes import ingredientes
+from modulos.modulosIngredientes.diccionarioIngredientes import importarDiccionario
 
 # Inicializamos variables
 precioTotal = 0
 cont = 0
+ingredientes=importarDiccionario()
 
 # Ciclo While principal
 while True:
