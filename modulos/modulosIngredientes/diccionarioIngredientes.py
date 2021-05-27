@@ -1,9 +1,11 @@
-# Definimos el diccionario de datos con los ingredientes del archivo .txt
-ingredientes = {}
+import json
+
+# Definimos la direccion del archivo json
+direccionJson="modulos/modulosIngredientes/listaIngredientes.json"
 entrada=""
 
 # Esta funcion toma un mensaje en el primer argumento que se va a mostrar en bucle hasta que se ingrese una de las opciones tomadas en el segundo argumento
-# Retorna la opción ingresada, tomando en cuenta que ya fué validada
+# Retorna la opción válida ingresada
 # El uso es en un if, comparando el resultado de la función con lo que se quiera hacer en el if
 def validarEntrada(mensaje,opciones):
     while True:
@@ -21,25 +23,46 @@ def validarEntrada(mensaje,opciones):
             break 
     return entrada
 
-# Función para validar que un número ingresado sea float
-def validarFloat(numero):
-    try:
-        float(numero)
-        if float(numero)<0:
-            print("\nEl precio que ingresó es negativo")
-            return 1
+def validarFloat(mensaje, salida=0):
+    while True:
+        print(mensaje)
+        numero=input()
+        if salida==1 and numero=='n':
+            return False
+        try:
+            float(numero)
+            if float(numero)<0:
+                print("\nEl precio que ingresó es negativo")
+                continue
+            else:
+                if validarEntrada(f"Usted ingreso el precio { numero }. Desea continuar con este precio? [s/n]",['s','n'])=='s':
+                    return numero
+                else:
+                    continue
+
+        except ValueError:
+            print("\nEl precio que ingresó no es un número válido. Ingrese un numero real.") 
+            continue
+
+# Funcion que toma un mensaje y lo imprime, pide una entrada y pide al usuario confirmar si la entrada es correcta
+# Si no es correcta se repite. Si si es correcta retorna la entrada ingresada. 
+# Si la entrada es 'n' se rompe el loop y retorna False.
+def manejoString(mensaje,*args):
+    while True:
+        print(mensaje)
+        nombre=input()
+        if nombre=='n':
+            return False
         else:
-            return 0
-    
-    except ValueError:
-        print("\nEl precio que ingresó no es un número válido") 
-        return 1  
+            x=validarEntrada(f"Seguro que desea continuar con '{ nombre }'? [s/n].",['s','n'])
+            if x=='s':
+                return nombre
+            else:
+                continue
 
 def importarDiccionario():
-    with open("modulos/modulosIngredientes/listaIngredientes.txt", encoding="utf-8") as f:
-        for line in f:
-            (abv,precio,nombre) = line.strip().split(",")
-            ingredientes[str(abv)] = { 'precio': float(precio), 'nombre': str(nombre)}
+    with open(direccionJson, encoding="utf-8") as archivoJson:
+        ingredientes=json.load(archivoJson)
     return ingredientes
 
 ingredientes=importarDiccionario()
@@ -57,11 +80,11 @@ if __name__=="__main__":
                 "abreviación para agregar un ingrediente nuevo. Para guardar sus cambios, ingrese [guardar]")  
             abv=input()
 
+            ### Guardar diccionario como json
+
             if abv=="guardar":
-                with open("modulos/modulosIngredientes/listaIngredientes.txt", "w", encoding="utf-8") as file:
-                    for i in ingredientes:
-                        linea=f"{ i },{ ingredientes[i]['precio'] },{ ingredientes[i]['nombre'] }"
-                        file.write(linea+"\n")
+                with open(direccionJson, "w", encoding="utf-8") as archivoJson:
+                    json.dump(ingredientes,archivoJson)
                     print("Sus cambios han sido guardados")
 
             # Si es un ingrediente existente
@@ -74,110 +97,54 @@ if __name__=="__main__":
                     match validarEntrada("Que valor desea modificar?\n abv = abreviacion\n nombre = nombre\n precio = precio\n borrar = eliminar el ingrediente (no se puede deshacer!)\n n = volver al inicio"\
                         ,("abv","nombre","precio","borrar","n")):
                         case "abv":
-                            print(f"Usted está modificando la abreviacion de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese la nueva abreviacion o ingrese [n] para volver al inicio.")
-                            entrada=input()
+                            entrada=manejoString(f"Usted está modificando la abreviacion de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese la nueva abreviacion o ingrese [n] para volver al inicio.")
                             # Asegura que la entrada no sea n. Si es n se sale.
-                            if entrada!='n':
+                            if entrada!=False:
                                 ingredientes[entrada]=ingredientes.pop(abv)
-                                entrada=""
                             else:
-                                entrada=""
                                 continue
 
                         case "nombre":
-                            print(f"Usted está modificando el nombre de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese el nuevo nombre o ingrese [n] para volver al inicio.")
-                            entrada=input()
+                            entrada=manejoString(f"Usted está modificando el nombre de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese el nuevo nombre o ingrese [n] para volver al inicio.")
                             # Asegura que la entrada no sea n. Si es n se sale.
-                            if entrada!='n':
+                            if entrada!=False:
                                 ingredientes[abv]['nombre']=entrada
-                                entrada=""
                             else:
-                                entrada=""
                                 continue
 
                         case "precio":
-                            while True:
-                                print(f"Usted está modificando el precio de ({ abv }): { ingredientes[abv]['nombre'] }, que actualmente es { ingredientes[abv]['precio'] }. Ingrese el nuevo precio o ingrese [n] para volver al inicio.")
-                                entrada=input()
-                                if entrada!='n':
-                                    # Se ingresó un float válido
-                                    if validarFloat(entrada)==0:
-                                        ingredientes[abv]['precio']=float(entrada)
-                                        break
-                                    # Se ingresó un valor no válido    
-                                    else:
-                                        print('Se ingresó un numero inválido. Intente de nuevo.')
-                                        continue
-                                # Se ingresó n por lo que el programa regresa al inicio
-                                else:
-                                    entrada=""
-                                    continue
-
+                            entrada=validarFloat(f"Usted está modificando el precio de ({ abv }): { ingredientes[abv]['nombre'] }, que actualmente es { ingredientes[abv]['precio'] }. Ingrese el nuevo precio o ingrese [n] para volver al inicio.",1)
+                            if entrada!=False:
+                                ingredientes[abv]['precio']=float(entrada)
+                            else:
+                                continue
+                        
                         case "borrar":
-                            if validarEntrada(f"Usted está a punto de eliminar del registro a ({ abv }): { ingredientes[abv]['nombre'] }. Esta acción no puedes deshacerse. Está seguro? [s/n]",("s","n"))\
+                            if validarEntrada(f"Usted está a punto de eliminar del registro a ({ abv }): { ingredientes[abv]['nombre'] }. Esta acción no puede deshacerse. Está seguro? [s/n]",("s","n"))\
                                 =="s":
                                 # Elimina el ingrediente del diccionario
                                 del ingredientes[abv]  
                             else:
-                                entrada=""
                                 print("Regresando al inicio...")
                                 continue
 
                         case "n":
                             continue
-
-                else:
-                    break
                 
             # Si es un ingrediente nuevo
             else:
 
-                #Loop para ingresar nombre de ingrediente nuevo
-                while True:
-                    print(f"\nIngrese el nombre del nuevo ingrediente ({ abv }):")
-                    nombre=input()
+                #Ingresar nombre de ingrediente nuevo
+                nombre=manejoString(f"\nIngrese el nombre del nuevo ingrediente ({ abv }) o ingrese [n] para regresar a la pantalla inicial.")
+                if nombre!=False:
 
-                    # Si sí desea continuar con el nombre ingresado
-                    if validarEntrada(f"Seguro que desea continuar con el nombre: ({ abv }) { nombre }? [s/n]",("s","n"))\
-                        =="s":
+                    # Validar que el precio sea valido
+                    precio=validarFloat(f"Ingrese el precio del nuevo ingrediente ({ abv }) { nombre } (solo numeros reales positivos) o ingrese [n] para regresar a la pantalla inicial.",1)
+                    if precio!=False:
 
-                        # Loop para ingresar precio
-                        while True:
-                            print(f"Ingrese el precio del nuevo ingrediente ({ abv }) { nombre } (Solo numeros reales positivos)")
-                            precio=input()
-
-                            # Validar que el precio sea valido
-                            if validarFloat(precio)==0:
-
-                                # Confirmacion aceptada de todos los datos nuevos
-                                if validarEntrada(f"Seguro que desea continuar con los siguientes datos?: ({ abv }) {nombre}: {precio} [s/n]",("s","n"))\
-                                    =="s":
-                                    ingredientes[str(abv)] = { 'precio': float(precio), 'nombre': str(nombre)}
-                                    print("Ingrediente nuevo agregado. Lista actual: ")
-                                    break
-                                
-                                # Negada la confirmación de todos los datos nuevos
-                                else:
-
-                                    # Si se desea ingresar otro precio
-                                    if validarEntrada("Desea ingresar otro precio? [n] regresará a la pantalla inicial. [s/n]",("s","n"))\
-                                        =="s":
-                                        continue
-                                    # No se desea ingresar otro precio
-                                    else:
-                                        break
-                            # El precio no es válido        
-                            else:
-                                continue
-                            
-                    # Si no desea continuar con el nombre ingresado
-                    else:
-                        if validarEntrada(f"Desea ingresar otro nombre? [n] regresará a la pantalla inicial. [s/n]",("s","n"))\
-                        =="s":
-                        
-                            continue
-                        # Si se elige no, se sale del loop y regresa a la pantalla inicial 
-                        else:
-                            break
-                    break
+                        # Confirmacion aceptada de todos los datos nuevos
+                        if validarEntrada(f"Seguro que desea continuar con los siguientes datos?: ({ abv }) {nombre}: {precio}. [n] Regresará a la pantalla principal. [s/n]",("s","n"))\
+                            =="s":
+                            ingredientes[str(abv)] = { 'precio': float(precio), 'nombre': str(nombre)}
+                            print("Ingrediente nuevo agregado. Lista actual: ")
 
