@@ -11,10 +11,7 @@ ingredientes=importarDiccionario()
 # Ciclo While principal
 while True:
 	precioActual = 0
-
-	print(f'Sandwich número {cont + 1}\n')
-	print('Opciones:')
-	aux = pedirSandwich(precioActual, precioTotal)
+	aux = pedirSandwich(precioActual, precioTotal, cont)
 	precioActual = aux[0]
 	tam = aux[1]
 
@@ -37,7 +34,7 @@ while True:
 		# de seleccionar el sandwich continua al menu de imprimir cliente
 		if ing == 'e':
 			precioActual = 0
-			aux = pedirSandwich(precioActual, precioTotal)
+			aux = pedirSandwich(precioActual, precioTotal, cont)
 			precioActual = aux[0]
 			tam = aux[1]
 			continue

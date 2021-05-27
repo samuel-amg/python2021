@@ -21,13 +21,15 @@ def imprimirIngredientes(ingredientes):
 
 # Menu para seleccionar el tamaño del sandwich
 
-def pedirSandwich(precioActual, precioTotal):
+def pedirSandwich(precioActual, precioTotal, cont):
     # Ciclo para preguntar el tamaño del sandwich
 	# En caso de error, se repite
 	while True:
 		clear()
 		header()
-		tam = input(f'Monto actual a pagar: {precioTotal} \nTamaños:  Triple ( t ) Doble ( d ) Individual ( i ): ')
+		print(f'Sandwich número {cont + 1}\nMonto actual a pagar: {precioTotal}')
+		print('Opciones:')
+		tam = input(f'\nTamaños:  Triple ( t ) Doble ( d ) Individual ( i ): ')
 
 		if tam == 't':
 			precioActual += 580
