@@ -1,3 +1,5 @@
+import time
+from modulos.menus import pedirSandwich, imprimirIngredientes
 from modulos.clear import clear
 from modulos.modulosIngredientes.diccionarioIngredientes import importarDiccionario
 
@@ -8,49 +10,13 @@ ingredientes=importarDiccionario()
 
 # Ciclo While principal
 while True:
-
-	clear()
-
-	print("**************************\n"\
-		  "*    SANDWICHES UCAB     *\n"\
-		  "**************************\n")
-
 	precioActual = 0
 
 	print(f'Sandwich número {cont + 1}\n')
 	print('Opciones:')
-
-	# Ciclo para preguntar el tamaño del sandwich
-	# En caso de error, se repite
-	while True:
-		tam = input('Tamaños:  Triple ( t ) Doble ( d ) Individual ( i ): ')
-
-		if tam == 't':
-			precioActual += 580
-			tam = 'Triple'
-		elif tam == 'd':
-			precioActual += 430
-			tam = 'Doble'
-		elif tam == 'i':
-			precioActual += 280
-			tam = 'Individual'
-		else:
-			print('=> Debe seleccionar el tamaño correcto!!')
-			continue
-
-		break
-
-
-	# Imprimir ingredientes
-	def imprimirIngredientes():
-		print("\nIngredientes:")
-
-		for i in ingredientes:
-			print(f'{ ingredientes[i]["nombre"] }\t({ i })')
-		
-		print()
-
-	imprimirIngredientes()
+	aux = pedirSandwich(precioActual, precioTotal)
+	precioActual = aux[0]
+	tam = aux[1]
 
 	# Aca se almacenará el ingrediente seleccionado
 	ing = 'ingredientes'
@@ -63,18 +29,29 @@ while True:
 
 	# Ciclo que se encarga de pedir ingredientes hasta presionar enter
 	while ing != '':
+		imprimirIngredientes(ingredientes)
+		print(f'Subtotal a pagar por un sandwich { tam }: { precioActual }')
 		ing = input("Indique ingrediente (enter para terminar): ")
 
-		if ing in ingredientes:
+		# En caso de ingresar (e) la pantalla vuelve al menu anterior y despues 
+		# de seleccionar el sandwich continua al menu de imprimir cliente
+		if ing == 'e':
+			precioActual = 0
+			aux = pedirSandwich(precioActual, precioTotal)
+			precioActual = aux[0]
+			tam = aux[1]
+			continue
+		# Ingreso normal de ingredientes
+		elif ing in ingredientes:
 			precioActual += ingredientes[ing]["precio"]
 			orden += ingredientes[ing]["nombre"] + ", "
 			banIng = True
 		# Validación de ingrediente ingresado
-		else:
+		elif ing != '':
 			clear()
-			print("Por favor ingrese un ingrediente válido, asegurese de ingresar la etiqueta de \n"\
-				"dos letra provista dentro del parentesis en la lista.")
-			imprimirIngredientes()
+			input("Por favor ingrese un ingrediente válido, asegurese de ingresar la etiqueta de \n"\
+				"dos letra provista dentro del parentesis en la lista. Ingrese cualquier tecla para continuar.")
+			continue
 		
 		
 
@@ -85,13 +62,13 @@ while True:
 	else:
 		orden += 'Queso'
 
-	# Imprimir orden
-	print(f'\nUsted seleccionó un { orden } \n')
-	print(f'Subtotal a pagar por un sandwich { tam }: { precioActual }\n')
-	print('**************************')
-
 	# Se suma el precio del sandwich individual al total
 	precioTotal += precioActual
+
+	# Imprimir orden
+	print(f'\nUsted seleccionó un { orden } \n')
+	print(f'Total a pagar: { precioTotal }\n')
+	print('**************************')
 
 	continuar = input('¿Desea continuar [s/n]?: ')
 
