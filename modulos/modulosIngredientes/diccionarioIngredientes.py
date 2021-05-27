@@ -1,8 +1,7 @@
 import json
 
-# Definimos el diccionario de datos con los ingredientes del archivo .txt
+# Definimos la direccion del archivo json
 direccionJson="modulos/modulosIngredientes/listaIngredientes.json"
-ingredientes = {}
 entrada=""
 
 # Esta funcion toma un mensaje en el primer argumento que se va a mostrar en bucle hasta que se ingrese una de las opciones tomadas en el segundo argumento
@@ -24,23 +23,6 @@ def validarEntrada(mensaje,opciones):
             break 
     return entrada
 
-# Función para validar que un número ingresado sea float. Deprecada
-# def validarFloatAlfa(numero):
-#     try:
-#         float(numero)
-#         if float(numero)<0:
-#             print("\nEl precio que ingresó es negativo")
-#             return 1
-#         else:
-#             return 0
-    
-#     except ValueError:
-#         print("\nEl precio que ingresó no es un número válido") 
-#         return 1  
-
-# Funcion para validar que se ingrese un Float.
-# Se repite indefinidamente hasta que se ingrese un float a menos que se ingrese como argumento salida=1, 
-# En tal caso se rompe el loop y retorna False.
 def validarFloat(mensaje, salida=0):
     while True:
         print(mensaje)
@@ -62,8 +44,8 @@ def validarFloat(mensaje, salida=0):
             print("\nEl precio que ingresó no es un número válido. Ingrese un numero real.") 
             continue
 
-# Funcion que toma un mensaje y lo imprime y pide una entrada y pide al usuario confirmar si al entrada es correcta
-# Si no es correcta se repite. Si si es correcta devuelve la entrada ingresada. 
+# Funcion que toma un mensaje y lo imprime, pide una entrada y pide al usuario confirmar si la entrada es correcta
+# Si no es correcta se repite. Si si es correcta retorna la entrada ingresada. 
 # Si la entrada es 'n' se rompe el loop y retorna False.
 def manejoString(mensaje,*args):
     while True:
@@ -78,15 +60,10 @@ def manejoString(mensaje,*args):
             else:
                 continue
 
-### Colocar aqui importación de json. 
-
 def importarDiccionario():
     with open(direccionJson, encoding="utf-8") as archivoJson:
         ingredientes=json.load(archivoJson)
     return ingredientes
-
-
-### En ingredientes se debería coloar diccionario, por lo que el json debe convertirse a un diccionario en la funcion
 
 ingredientes=importarDiccionario()
 
@@ -170,7 +147,4 @@ if __name__=="__main__":
                             =="s":
                             ingredientes[str(abv)] = { 'precio': float(precio), 'nombre': str(nombre)}
                             print("Ingrediente nuevo agregado. Lista actual: ")
-                            continue
-                        else:
-                            continue
 
