@@ -94,42 +94,42 @@ if __name__=="__main__":
                     =="s":
 
                     # Se confirmo que es este el ingrediente a modificar
-                    match validarEntrada("Que valor desea modificar?\n abv = abreviacion\n nombre = nombre\n precio = precio\n borrar = eliminar el ingrediente (no se puede deshacer!)\n n = volver al inicio"\
-                        ,("abv","nombre","precio","borrar","n")):
-                        case "abv":
-                            entrada=manejoString(f"Usted está modificando la abreviacion de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese la nueva abreviacion o ingrese [n] para volver al inicio.")
-                            # Asegura que la entrada no sea n. Si es n se sale.
-                            if entrada!=False:
-                                ingredientes[entrada]=ingredientes.pop(abv)
-                            else:
-                                continue
-
-                        case "nombre":
-                            entrada=manejoString(f"Usted está modificando el nombre de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese el nuevo nombre o ingrese [n] para volver al inicio.")
-                            # Asegura que la entrada no sea n. Si es n se sale.
-                            if entrada!=False:
-                                ingredientes[abv]['nombre']=entrada
-                            else:
-                                continue
-
-                        case "precio":
-                            entrada=validarFloat(f"Usted está modificando el precio de ({ abv }): { ingredientes[abv]['nombre'] }, que actualmente es { ingredientes[abv]['precio'] }. Ingrese el nuevo precio o ingrese [n] para volver al inicio.",1)
-                            if entrada!=False:
-                                ingredientes[abv]['precio']=float(entrada)
-                            else:
-                                continue
-                        
-                        case "borrar":
-                            if validarEntrada(f"Usted está a punto de eliminar del registro a ({ abv }): { ingredientes[abv]['nombre'] }. Esta acción no puede deshacerse. Está seguro? [s/n]",("s","n"))\
-                                =="s":
-                                # Elimina el ingrediente del diccionario
-                                del ingredientes[abv]  
-                            else:
-                                print("Regresando al inicio...")
-                                continue
-
-                        case "n":
+                    opc = validarEntrada("Que valor desea modificar?\n abv = abreviacion\n nombre = nombre\n precio = precio\n borrar = eliminar el ingrediente (no se puede deshacer!)\n n = volver al inicio"\
+                        ,("abv","nombre","precio","borrar","n"))
+                    if opc=="abv":
+                        entrada=manejoString(f"Usted está modificando la abreviacion de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese la nueva abreviacion o ingrese [n] para volver al inicio.")
+                        # Asegura que la entrada no sea n. Si es n se sale.
+                        if entrada!=False:
+                            ingredientes[entrada]=ingredientes.pop(abv)
+                        else:
                             continue
+
+                    elif opc=="nombre":
+                        entrada=manejoString(f"Usted está modificando el nombre de ({ abv }): { ingredientes[abv]['nombre'] }. Ingrese el nuevo nombre o ingrese [n] para volver al inicio.")
+                        # Asegura que la entrada no sea n. Si es n se sale.
+                        if entrada!=False:
+                            ingredientes[abv]['nombre']=entrada
+                        else:
+                            continue
+
+                    elif opc=="precio":
+                        entrada=validarFloat(f"Usted está modificando el precio de ({ abv }): { ingredientes[abv]['nombre'] }, que actualmente es { ingredientes[abv]['precio'] }. Ingrese el nuevo precio o ingrese [n] para volver al inicio.",1)
+                        if entrada!=False:
+                            ingredientes[abv]['precio']=float(entrada)
+                        else:
+                            continue
+                        
+                    elif opc=="borrar":
+                        if validarEntrada(f"Usted está a punto de eliminar del registro a ({ abv }): { ingredientes[abv]['nombre'] }. Esta acción no puede deshacerse. Está seguro? [s/n]",("s","n"))\
+                            =="s":
+                            # Elimina el ingrediente del diccionario
+                            del ingredientes[abv]  
+                        else:
+                            print("Regresando al inicio...")
+                            continue
+
+                    elif opc=="n":
+                        continue
                 
             # Si es un ingrediente nuevo
             else:
