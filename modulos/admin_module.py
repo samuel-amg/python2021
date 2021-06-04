@@ -58,7 +58,7 @@ def register_menu():
     try:
         user = register(credentials)
         if type(user) == dict:
-            user['_id'] = user['_id'].to_string()
+            user['_id'] = str(user['_id'])
             return user
         raise Exception('Hubo un error al crear el usuario')
     except Exception as e:
@@ -146,14 +146,14 @@ def show_account_data(user):
 
 def credentials_menu_selection():
     while True:
-        option = input('Seleccione una opcion:\n1. Iniciar Sesion\n2. Registrar nuevo admin\n-> ')
+        option = input('Seleccione una opcion:\n1. Iniciar Sesion\n2. Registrar nuevo admin\n3. Salir\n-> ')
 
         if option == '1':
             return login_menu()
         elif option == '2':
             return register_menu()
         elif option == '3':
-            return
+            return option
         else:
             print('La opcion es invalida. Intente de nuevo.\n')
 
@@ -197,6 +197,9 @@ def main_menu(user):
             print('La opcion es invalida. Intente de nuevo.\n')
 
 def admin_main():
-    user = credentials_menu_selection()
-    if user != None:
-        main_menu(user)
+    while True:
+        user = credentials_menu_selection()
+        if user != None and user != '3':
+            main_menu(user)
+        if user == '3':
+            break

@@ -20,7 +20,6 @@ def login(credentials):
     if len(user) != 0:
         decrypted_password = fernet.decrypt(user[0]['password'].encode()).decode()
         if decrypted_password == credentials['password']:
-            user[0]['password'] = decrypted_password
             return user[0]
         else:
             return "Nombre de Usuario o contraseña incorrecta"
