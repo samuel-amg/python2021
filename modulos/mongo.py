@@ -20,7 +20,7 @@ def disconnect(connection):
 def getAll(collection, query):
     connection = connect()
     db = connection[os.getenv("MONGO_DATABASE")]
-    response = db[collection].find(query)
+    response = list(db[collection].find(query))
     disconnect(connection)
     return response
 

@@ -2,7 +2,7 @@ import os
 
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
-from mongo import *
+from modulos.mongo import *
 
 load_dotenv()
 
@@ -14,6 +14,7 @@ def register(credentials):
     return get("users", user_id)
 
 def login(credentials):
+    print(os.getenv('KEY_SECRET'))
     fernet = Fernet(os.getenv('KEY_SECRET'))
     user = list(getAll("users", {"username": credentials['username']}))
 
