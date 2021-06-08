@@ -1,13 +1,13 @@
 from modulos.authentication import login, register, change_password
 from modulos.mongo import update
 from modulos.toppings_module import toppings_main_menu
-import modulos.clear
+from modulos.clear import clear
 
 def login_menu():
     credentials = {'username': "", 'password': ""}
 
     while True:
-        clear.clear()
+        clear()
         print('**** INICIO DE SESION ****\n')
         while credentials['username'] == "":
             credentials['username'] = input('Username: ')
