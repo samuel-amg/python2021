@@ -1,6 +1,7 @@
-from authentication import login, register, change_password
-from mongo import update
-import clear
+from modulos.authentication import login, register, change_password
+from modulos.mongo import update
+from modulos.toppings_module import toppings_main_menu
+import modulos.clear
 
 def login_menu():
     credentials = {'username': "", 'password': ""}
@@ -188,7 +189,7 @@ def main_menu(user):
         print('*** Bienvenid@, ', user['username'], ' ****\n')
         option = input('Que desea hacer?\n1. Gestionar Ingredientes\n2. Gestionar cuenta\n3. Cerrar Sesion\n-> ')
         if option == '1':
-            return
+            toppings_main_menu(user)
         elif option == '2':
             my_account_menu(user)
         elif option == '3':
@@ -203,3 +204,7 @@ def admin_main():
             main_menu(user)
         if user == '3':
             break
+
+
+if __name__ == "__main__":
+    admin_main()

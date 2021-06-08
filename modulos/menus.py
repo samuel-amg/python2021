@@ -14,8 +14,8 @@ def imprimirIngredientes(ingredientes):
     header()
     print("\nIngredientes:")
 
-    for i in ingredientes:
-        print(f'{ ingredientes[i]["nombre"] }\t({ i })')
+    for index, ingrediente in enumerate(ingredientes):
+        print(f'{ ingrediente["name"] }\t({ index })')
     print("Volver al menu anterior (e)")
     print()
 
